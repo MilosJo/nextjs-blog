@@ -7,34 +7,48 @@ import Date from '../../../components/Date';
 import { getAllPostIds, getPostData } from '../../../lib/posts'
 
 export default function Post ({ postData }) {
+  const { title, date, contentHtml } = postData;
+  
   return (
     <Layout>
       <Head>
-        <title>{postData.title}</title>
+        <title>{title}</title>
       </Head>
       <article>
-        <h1 className={utilStyles.headingXl}>{postData.title}</h1>
+        <h1 className={utilStyles.headingXl}>{title}</h1>
         <div className={utilStyles.lightText}>
-          <Date dateString={postData.date} />
+          <Date dateString={date} />
         </div>
-        <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+        <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
       </article>
     </Layout>
   );
 };
 
 export async function getStaticPaths() {
-  const paths = getAllPostIds();
+  const postPaths = getAllPostIds();
+
+  const apiUrl = 'https://cat-fact.herokuapp.com/facts';
+  const data = await fetch(apiUrl);
+  const allCatsData = await data.json();
+  const catPaths = allCatsData.all.map(item => {
+    return {
+      params: {
+        id: item._id,
+      },
+    };
+  });
+
 
   return {
-    paths,
+    paths: [...postPaths, ...catPaths],
     fallback: false,
   };
 };
 
 export async function getStaticProps({ params }) {
   const postData = await getPostData(params.id);
-
+  
   return {
     props: {
       postData,
