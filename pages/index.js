@@ -33,7 +33,7 @@ export default function Home ({ allPostsData, allCatsData }) {
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>[via API]</h2>
         <ul className={utilStyles.list}>
-          {allCatsData.all.slice(0, 5).map(({ _id, text }) => (
+          {allCatsData.all.map(({ _id, text }) => (
             <li className={utilStyles.listItem} key={_id}>
               <Link href={`/blog/posts/${_id}`}>
                 <a>{text}</a>
@@ -49,7 +49,7 @@ export default function Home ({ allPostsData, allCatsData }) {
       <div style={{ height: 50 }} />
       <section className={utilStyles.headingMd}>
         <p>
-          (This is sample website - you’ll be building a site like this on{' '}
+          (This is a sample website - you’ll be building a site like this on{' '}
           <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
         </p>
       </section>
