@@ -31,7 +31,7 @@ export async function getStaticPaths() {
   const apiUrl = 'https://cat-fact.herokuapp.com/facts';
   const data = await fetch(apiUrl);
   const allCatsData = await data.json();
-  const catPaths = allCatsData.all.slice(0, 5).map(item => {
+  const catPaths = allCatsData.all.map(item => {
     return {
       params: {
         id: item._id,
