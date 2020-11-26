@@ -53,7 +53,7 @@ export default function Post ({ postData }) {
 // };
 
 export async function getServerSideProps({ params }) {
-  const result = await fetch('http://localhost:3000/api/post?id=' + params.id);
+  const result = await fetch(`${process.env.SITE_ROOT}/api/post?id=${params.id}`);
   const { post } = await result.json();
   return {
     props: {
