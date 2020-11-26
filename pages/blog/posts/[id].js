@@ -23,36 +23,36 @@ export default function Post ({ postData }) {
   );
 };
 
-export async function getStaticPaths() {
-  const res = await fetch('http://localhost:3000/api/get-all-posts');
-  const { posts } = await res.json();
-  const postPaths = posts.map((id) => {
-    return {
-      params: {
-        id,
-      },
-    };
-  });
+// export async function getStaticPaths() {
+//   const res = await fetch('http://localhost:3000/api/get-all-posts');
+//   const { posts } = await res.json();
+//   const postPaths = posts.map((id) => {
+//     return {
+//       params: {
+//         id,
+//       },
+//     };
+//   });
 
-  const apiUrl = 'https://cat-fact.herokuapp.com/facts';
-  const data = await fetch(apiUrl);
-  const allCatsData = await data.json();
-  const catPaths = allCatsData.all.map(item => {
-    return {
-      params: {
-        id: item._id,
-      },
-    };
-  });
+//   const apiUrl = 'https://cat-fact.herokuapp.com/facts';
+//   const data = await fetch(apiUrl);
+//   const allCatsData = await data.json();
+//   const catPaths = allCatsData.all.map(item => {
+//     return {
+//       params: {
+//         id: item._id,
+//       },
+//     };
+//   });
 
 
-  return {
-    paths: [...postPaths, ...catPaths],
-    fallback: false,
-  };
-};
+//   return {
+//     paths: [...postPaths, ...catPaths],
+//     fallback: false,
+//   };
+// };
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const result = await fetch('http://localhost:3000/api/post?id=' + params.id);
   const { post } = await result.json();
   return {
