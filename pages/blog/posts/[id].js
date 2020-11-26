@@ -4,8 +4,6 @@ import utilStyles from '../../../styles/utils.module.css'
 import Layout from '../../../components/Layout';
 import Date from '../../../components/Date';
 
-import { getAllPostIds, getPostData } from '../../../lib/posts'
-
 export default function Post ({ postData }) {
   const { title, date, contentHtml } = postData;
   
@@ -26,7 +24,15 @@ export default function Post ({ postData }) {
 };
 
 export async function getStaticPaths() {
-  const postPaths = getAllPostIds();
+  const res = await fetch('http://localhost:3000/api/get-all-posts');
+  const { posts } = await res.json();
+  const postPaths = posts.map((id) => {
+    return {
+      params: {
+        id,
+      },
+    };
+  });
 
   const apiUrl = 'https://cat-fact.herokuapp.com/facts';
   const data = await fetch(apiUrl);
@@ -47,11 +53,11 @@ export async function getStaticPaths() {
 };
 
 export async function getStaticProps({ params }) {
-  const postData = await getPostData(params.id);
-  
+  const result = await fetch('http://localhost:3000/api/post?id=' + params.id);
+  const { post } = await result.json();
   return {
     props: {
-      postData,
+      postData: post,
     }
   };
 };

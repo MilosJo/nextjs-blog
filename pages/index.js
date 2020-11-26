@@ -8,7 +8,7 @@ import { getSortedPostsData } from '../lib/posts'
 
 import utilStyles from '../styles/utils.module.css'
 
-export default function Home ({ allPostsData, allCatsData }) {
+export default function Home ({ allPostsData, allCatsData, allUsers }) {
   return (
     <Layout home>
       <Head>
@@ -32,6 +32,26 @@ export default function Home ({ allPostsData, allCatsData }) {
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>[via API]</h2>
+        <ul className={utilStyles.list}>
+          {allUsers.map((user, index) => (
+            <li className={utilStyles.listItem} key={index}>
+              <Link href={`/blog/users/${user}`}>
+                <a>{user}</a>
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                <Date dateString="2020-11-24" />
+              </small>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+        <h2 className={utilStyles.headingLg}>
+          [via External Source]
+          <br />
+          <span style={{ fontSize: 18 }}>stress test(~300 results)</span>
+        </h2>
         <ul className={utilStyles.list}>
           {allCatsData.all.map(({ _id, text }) => (
             <li className={utilStyles.listItem} key={_id}>
@@ -64,10 +84,14 @@ export async function getStaticProps() {
   const data = await fetch(apiUrl);
   const allCatsData = await data.json();
 
+  const res = await fetch('https://gist.githubusercontent.com/MilosJo/d614447b753d620f9c6ba6f2e6c0ef78/raw/75500c9c961f848717a8cfb04d25aafec64dd068/users.json');
+  const { allUsers } = await res.json();
+
   return {
     props: {
       allPostsData,
       allCatsData,
+      allUsers,
     }
   }
 }
